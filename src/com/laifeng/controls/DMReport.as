@@ -5,9 +5,10 @@ package  com.laifeng.controls
 	import com.laifeng.interfaces.IDataModule;
 	import com.laifeng.module.vo.StreamLogData;
 	
+	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.net.sendToURL;
-
+	
 	public class DMReport implements IDataModule
 	{
 		public const REPORT_URL:String = "http://pstat.xiu.youku.com:80/lr?";
@@ -21,6 +22,7 @@ package  com.laifeng.controls
 			_dmCenter = DataModule.get.getModule(ModuleKey.DM_LIVECORE) as DMCenter;
 		}
 		
+		
 		/**统计 :get playlist  success*/
 		public function reportGetplaylistSucceed(data:Object):void{
 			var url:String = REPORT_URL;
@@ -29,11 +31,11 @@ package  com.laifeng.controls
 			url += "&s="     		+  getStreamId();
 			url += "&sid=" 		+ sessionId;
 			url += "&tc="   		+ data["tryCount"];
-			url += "&ust=" 		+ "pc";
+			url += "&u=" 		+ "pc";
 			url += "&ct="   		+ data["ct"];
 			url += "&src=" 		+ "-1";
 			url += "&s_raw=" + "";
-			url += "&pl_addr="   + getStreamUrl();
+			url += "&pu="   + getStreamUrl();
 			
 			sendReport(url);
 		}
@@ -45,7 +47,7 @@ package  com.laifeng.controls
 			url += "&s="            +  getStreamId();
 			url += "&sid="        + sessionId;
 			url += "&reason=" + data["reason"];
-			url += "&ust="        + "pc";
+			url += "&u="        + "pc";
 			url += "&tc="          + data["tryCount"];
 			url += "&ct="          + data["ct"];
 			url += "&ec="          + data["ec"];
@@ -62,11 +64,11 @@ package  com.laifeng.controls
 			url += "&r="     		+ roomId;
 			url += "&s="     		+ getStreamId();
 			url += "&sid=" 		+ sessionId;
-			url += "&ust=" 		+ "pc";
+			url += "&u=" 		+ "pc";
 			url += "&ct="   		+ data["ct"];
 			url += "&src=" 		+ "-1";
 			url += "&s_raw=" + "";
-			url += "&pl_addr="   + getStreamUrl();
+			url += "&pu="   + getStreamUrl();
 			sendReport(url);
 		}
 		
@@ -77,7 +79,7 @@ package  com.laifeng.controls
 			url += "&s="            + getStreamId();
 			url += "&sid="    	  + sessionId;
 			url += "&reason=" + data["msg"];
-			url += "&ust="        + "pc";
+			url += "&u="        + "pc";
 			url += "&ct="          + data["ct"];
 			url += "&ec="          + data["code"];
 			url += "&src="        + "-1";
@@ -95,9 +97,9 @@ package  com.laifeng.controls
 			url += "&sid=" + sessionId;
 			url += "&tc="   + 1;
 			url += "&d="    + data.d;
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&ct="   + data.d;
-			url += "&pl_addr="   + getStreamUrl();
+			url += "&pu="   + getStreamUrl();
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
 			sendReport(url);
@@ -112,10 +114,10 @@ package  com.laifeng.controls
 			url += "&s="     + getStreamId();
 			url += "&sid=" + sessionId;
 			url += "&tc="   + 1;
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&ct="   + data.d;
 			url += "&reason=" + "StreamNotFound!";
-			url += "&pl_addr="   + getStreamUrl();
+			url += "&pu="   + getStreamUrl();
 			url += "&ec=3000";
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
@@ -131,7 +133,7 @@ package  com.laifeng.controls
 			url += "&s=" 	   + getStreamId();
 			url += "&sid=" + sessionId;
 			url += "&ct="   + "3";
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
 			sendReport(url);
@@ -153,22 +155,23 @@ package  com.laifeng.controls
 			url += "&cbec=" + streamLogData.currBfeCount;   //currentBufferEmptyCount
 			url += "&st=" 	+ streamLogData.systemTime;
 			url += "&vt=" 	+ streamLogData.videoTime;
-			url += "&pl_addr="   + getStreamUrl();
+			url += "&pu="   + getStreamUrl();
 			url += "&ct="   + "1";
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
-			url += "&ka=" +kaStr;
+			url += "&ka=" + kaStr;
 			
 			/*
 			if(isP2p()){
-				url += "&useP2p=" + "true";
-				url += "&loacaltionid=" + LiveConfig.get.streamLogData.localconntionId;
-				if(LiveConfig.get.streamLogData.playStatus.indexOf("noData")<0){
-					url+= formatP2pPlaystatus(LiveConfig.get.streamLogData.playStatus);
-				}
+			url += "&useP2p=" + "true";
+			url += "&loacaltionid=" + LiveConfig.get.streamLogData.localconntionId;
+			if(LiveConfig.get.streamLogData.playStatus.indexOf("noData")<0){
+			url+= formatP2pPlaystatus(LiveConfig.get.streamLogData.playStatus);
+			}
 			}
 			*/
+			
 			sendReport(url);
 		}
 		
@@ -185,7 +188,7 @@ package  com.laifeng.controls
 			url += "&s="     + getStreamId();
 			url += "&sid=" + sessionId;
 			url += "&d="    + 3000;
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&ct="   + data["delayTime"];
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
@@ -200,9 +203,10 @@ package  com.laifeng.controls
 			url += "&s=" + getStreamId();
 			url += "&sid=" + sessionId;
 			url += "&reason=" + data["msg"];
+			url += "&pu="   + getStreamUrl();
 			url += "&ec=3000";
 			url += "&ct="   + "0";
-			url += "&ust=" + "pc";
+			url += "&u=" + "pc";
 			url += "&src=" + "-1";
 			url += "&s_raw=" + "";
 			
@@ -212,10 +216,11 @@ package  com.laifeng.controls
 		
 		/**发送log*/
 		private function sendReport(url:String):void{
-			url += "&pversion="+LiveConfig.PLAYER_VERSION;
-			url += "&appid="+appId;
-			var urlRequest:URLRequest = new URLRequest(encodeURI(url));
-			sendToURL(urlRequest);
+			url += "&v="+LiveConfig.PLAYER_VERSION;
+			url += "&appid="+appId+"&userid="+this.userId;
+			try{
+				ExternalInterface.call(LiveConfig.get.jsNameSpace+"reportStatus",{url:encodeURI(url)});
+			}catch(err:Error){/** 不做处理 */}
 		}
 		
 		
@@ -240,6 +245,11 @@ package  com.laifeng.controls
 			return log;
 		}
 		
+		
+		
+		private function get userId():String{
+			return LiveConfig.get.initOption.userid;
+		}
 		
 		private function get appId():int{
 			return LiveConfig.get.initOption.appId;
@@ -273,7 +283,7 @@ package  com.laifeng.controls
 		
 		
 		public function destroy():void{
-		
+			
 		}
 		
 		
